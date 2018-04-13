@@ -1,4 +1,4 @@
-package com.xds.UI;
+package com.xds.services;
 
 import org.springframework.stereotype.Service;
 
