@@ -10,26 +10,28 @@ import java.util.Iterator;
 /**
  * Created by PhazedOut on 2/26/2018.
  */
+
+
+
 @Service
 public class KdsUIImpl extends JFrame implements KdsUI{
 
     private final SwingProperties swingProperties;
-    private final KTextPanes kTextPanes;
-    private final TimerJLabels timerList;
+    private final TextPaneService textPaneService;
+    private final TimerService timerService;
 
     private JLabel alert;
-    private JPanel bottomPanel;
     private JPanel mainPanel;
     private JLabel page;
 
     private JLabel displayLabel;
 
 
-    public KdsUIImpl(SwingProperties swingProperties, KTextPanes kTextPanes, TimerJLabels timerList){
+    public KdsUIImpl(SwingProperties swingProperties, TextPaneService textPaneService, TimerService timerService){
         super();
         this.swingProperties = swingProperties;
-        this.kTextPanes = kTextPanes;
-        this.timerList = timerList;
+        this.textPaneService = textPaneService;
+        this.timerService = timerService;
 
         initComponents();
         setVisible(true);
@@ -42,7 +44,7 @@ public class KdsUIImpl extends JFrame implements KdsUI{
 
         mainPanel = new JPanel();
 
-        bottomPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
         displayLabel = new JLabel();
         alert = new JLabel();
         page = new JLabel();
@@ -61,14 +63,14 @@ public class KdsUIImpl extends JFrame implements KdsUI{
 
         Font font = new Font("Helvetica", Font.PLAIN, 12);
 
-        Iterator<JTextPane> paneIterator = kTextPanes.getPanes();
-        Iterator<JLabel> timerIterator = timerList.getTimers();
+        Iterator<JTextPane> textPaneIterator = textPaneService.getPanes();
+        Iterator<JLabel> timerIterator = timerService.getTimers();
 
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
             JLabel name = new JLabel();
             JLabel timer = timerIterator.next();
-            JTextPane text = paneIterator.next();
+            JTextPane text = textPaneIterator.next();
 
 
             panel.setBackground(kdsGrey);
@@ -83,7 +85,7 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             /*bindPageLeft("LEFT", text);
             bindPageRight("RIGHT", text);
             bindRecall("BACK_SPACE", text);
-            text.addMouseListener(new bumpMouseAdapter(i));*/
+            text.addMouseListener(new BumpMouseAdapter(i));*/
 
             name.setBackground(kdsGrey);
             name.setForeground(Color.WHITE);
@@ -183,5 +185,9 @@ public class KdsUIImpl extends JFrame implements KdsUI{
 
     public void setPageNum(String pageNum) {
         this.page.setText(pageNum);
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 }

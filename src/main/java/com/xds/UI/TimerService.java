@@ -6,7 +6,9 @@ import java.util.Iterator;
 /**
  * Created by PhazedOut on 4/5/2018.
  */
-public interface TimerJLabels {
+public interface TimerService {
 
     Iterator<JLabel> getTimers();
+
+    void updateTimers();
 }

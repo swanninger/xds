@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
+
 @Getter
 @Setter
 @Component
@@ -12,4 +14,8 @@ import org.springframework.stereotype.Component;
 public class SwingProperties {
 
     private String displayLabelText;
+
+    private Color newTime;
+    private Color oldTime;
+    private Color lateTime;
 }

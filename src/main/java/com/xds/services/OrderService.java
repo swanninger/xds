@@ -4,9 +4,13 @@ import com.xds.domain.Order;
 
 public interface OrderService {
 
-    Order recallLastOrder();
+    void addOrder(Order order);
 
-    Boolean bumpOrder();
+    void recallLastOrder();
 
+    void bumpOrder(int pane);
 
+    Boolean saveOrder();
+
+    Integer getCurrentPage();
 }

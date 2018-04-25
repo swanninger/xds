@@ -1,5 +1,6 @@
 package com.xds.UI;
 
+import com.xds.services.OrderService;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -10,13 +11,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by Scott Wanninger on 5/12/2017.
  */
 @Service
-public class KTextPanesImpl implements KTextPanes {
+public class TextPaneServiceImpl implements TextPaneService {
+    private final OrderService orderService;
     private CopyOnWriteArrayList<JTextPane> panes;
 
-    KTextPanesImpl(){
+    public TextPaneServiceImpl(OrderService orderService){
+        this.orderService = orderService;
+
         panes = new CopyOnWriteArrayList<>();
+
         for (int i = 0; i < 10; i++) {
-            panes.add(new JTextPane());
+            JTextPane p = new JTextPane();
+            p.addMouseListener(new BumpMouseAdapter(orderService, i));
+            panes.add(p);
         }
     }
 

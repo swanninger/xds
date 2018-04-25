@@ -6,7 +6,7 @@ import java.util.Iterator;
 /**
  * Created by PhazedOut on 3/17/2018.
  */
-public interface KTextPanes {
+public interface TextPaneService {
 
     Iterator<JTextPane> getPanes();
 }
