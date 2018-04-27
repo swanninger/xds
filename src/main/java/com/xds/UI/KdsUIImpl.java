@@ -11,8 +11,6 @@ import java.util.Iterator;
  * Created by PhazedOut on 2/26/2018.
  */
 
-
-
 @Service
 public class KdsUIImpl extends JFrame implements KdsUI{
 
@@ -82,10 +80,6 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             text.setBackground(Color.BLACK);
             text.setForeground(Color.WHITE);
             text.setMargin(new Insets(3, 10, 0, 10));
-            /*bindPageLeft("LEFT", text);
-            bindPageRight("RIGHT", text);
-            bindRecall("BACK_SPACE", text);
-            text.addMouseListener(new BumpMouseAdapter(i));*/
 
             name.setBackground(kdsGrey);
             name.setForeground(Color.WHITE);

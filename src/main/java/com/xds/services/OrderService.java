@@ -6,11 +6,15 @@ public interface OrderService {
 
     void addOrder(Order order);
 
-    void recallLastOrder();
+    void recallOrder();
 
     void bumpOrder(int pane);
 
     Boolean saveOrder();
 
-    Integer getCurrentPage();
+    void pageRight();
+
+    void pageLeft();
+
+    void pageHome();
 }
