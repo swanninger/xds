@@ -13,14 +13,15 @@ public class Order {
 
     private final Integer orderNumber;
     private final LocalDateTime orderTime;
-    private String orderType;
+    private final String orderType;
     private LocalDateTime bumpTime;
 
     private CopyOnWriteArrayList<Plate> plates;
 
 
-    public Order(int orderNumber, LocalDateTime orderTime) {
+    public Order(int orderNumber, LocalDateTime orderTime, String orderType) {
         this.orderNumber = orderNumber;
         this.orderTime = orderTime;
+        this.orderType = orderType;
     }
 }

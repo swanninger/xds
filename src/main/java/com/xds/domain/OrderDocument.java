@@ -1,18 +1,23 @@
 package com.xds.domain;
 
 import lombok.Getter;
-import lombok.Setter;
-
 import javax.swing.text.Document;
+import java.util.List;
+
+/*
+ This class holds a reference to an order and its documents
+ */
 
 @Getter
-@Setter
 public class OrderDocument {
-    private Document document;
+    private List<Document> documents;
     private Order order;
 
-    public OrderDocument(Document document, Order order) {
-        this.document = document;
+    public OrderDocument(Order order) {
         this.order = order;
+    }
+
+    void addDocument(Document d){
+        documents.add(d);
     }
 }

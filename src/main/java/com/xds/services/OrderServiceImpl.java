@@ -4,23 +4,23 @@ import com.xds.domain.Order;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-    private Collection<Order> orderList;
+    private List<Order> orderList;
     private Deque<Order> recallList;
 
     private Integer currentPage;
     private Integer numDocuments;
 
     public OrderServiceImpl() {
-        this.recallList = new LinkedList<>();
         this.orderList = new CopyOnWriteArrayList<>();
+        this.recallList = new LinkedList<>();
 
         currentPage = 0;
         numDocuments = 0;
@@ -29,24 +29,31 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void addOrder(Order order) {
         orderList.add(order);
+        saveOrder(order);
     }
 
     @Override
     public void recallOrder() {
         log.info("recall order");
-//        orderList.add(recallList.pop());
+        orderList.add(0, recallList.pop());
     }
 
     @Override
     public void bumpOrder(int textPane) {
         // TODO: 4/24/2018
         log.info("Bump " + textPane);
+//        saveOrder();
     }
 
     @Override
-    public Boolean saveOrder() {
+    public Boolean saveOrder(Order order) {
         // TODO: 4/24/2018
         return null;
+    }
+
+    @Override
+    public void updateOrders() {
+        // TODO: 5/3/2018  
     }
 
     @Override

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
 @Service
@@ -32,11 +34,12 @@ public class KeyBindingServiceImpl implements KeyBindingService{
         bindPageHome("H");
 
         Iterator<JTextPane> panes = textPaneService.getPanes();
-        while (panes.hasNext()) {
+        for (int i = 0; i < 10; i++) {
             JTextPane p = panes.next();
             bindRecall("BACK_SPACE", p);
             bindPageLeft("LEFT", p);
             bindPageRight("RIGHT", p);
+            p.addMouseListener(new BumpMouseAdapter(i));
         }
     }
 
@@ -111,5 +114,17 @@ public class KeyBindingServiceImpl implements KeyBindingService{
         }
     }
 
+    public class BumpMouseAdapter extends MouseAdapter {
+        private final int textPane;
 
+        BumpMouseAdapter(int i){
+            this.textPane = i;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            System.out.println("Touch " + textPane);
+            orderService.bumpOrder(textPane);
+        }
+    }
 }

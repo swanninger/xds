@@ -1,6 +1,7 @@
 package com.xds.UI;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Iterator;
 
 /**
@@ -9,4 +10,6 @@ import java.util.Iterator;
 public interface TextPaneService {
 
     Iterator<JTextPane> getPanes();
+    Dimension getSize(Dimension dimension);
+
 }

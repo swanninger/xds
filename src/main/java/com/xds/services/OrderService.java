@@ -10,7 +10,9 @@ public interface OrderService {
 
     void bumpOrder(int pane);
 
-    Boolean saveOrder();
+    Boolean saveOrder(Order order);
+
+    void updateOrders();
 
     void pageRight();
 
