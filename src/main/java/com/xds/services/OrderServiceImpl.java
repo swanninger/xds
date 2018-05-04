@@ -1,6 +1,8 @@
 package com.xds.services;
 
+import com.xds.UI.DocumentService;
 import com.xds.domain.Order;
+import com.xds.domain.OrderDocument;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +14,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Service
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-    private List<Order> orderList;
-    private Deque<Order> recallList;
+    private final DocumentService documentService;
+
+    private List<OrderDocument> orderList;
+    private Deque<OrderDocument> recallList;
 
     private Integer currentPage;
     private Integer numDocuments;
 
-    public OrderServiceImpl() {
+    public OrderServiceImpl(DocumentService documentService) {
+        this.documentService = documentService;
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
 
@@ -28,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void addOrder(Order order) {
-        orderList.add(order);
+        orderList.add(documentService.createOrderDocument(order));
         saveOrder(order);
     }
 

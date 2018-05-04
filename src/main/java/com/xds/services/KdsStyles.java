@@ -11,4 +11,6 @@ public interface KdsStyles {
 
     SimpleAttributeSet getContTextStyle();
 
+    int getFontSize();
+
 }
