@@ -1,11 +1,14 @@
 package com.xds.services;
 
 import com.xds.UI.DocumentService;
+import com.xds.UI.TextPaneService;
+import com.xds.UI.TimerService;
 import com.xds.domain.Order;
 import com.xds.domain.OrderDocument;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final DocumentService documentService;
+    private final TimerService timerService;
+    private final TextPaneService textPaneService;
 
     private List<OrderDocument> orderList;
     private Deque<OrderDocument> recallList;
@@ -22,18 +27,23 @@ public class OrderServiceImpl implements OrderService {
     private Integer currentPage;
     private Integer numDocuments;
 
-    public OrderServiceImpl(DocumentService documentService) {
+    public OrderServiceImpl(DocumentService documentService, TimerService timerService, TextPaneService textPaneService) {
         this.documentService = documentService;
+        this.timerService = timerService;
+        this.textPaneService = textPaneService;
+
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
 
         currentPage = 0;
-        numDocuments = 0;
+        numDocuments = 0; //Tracks total number of documents for paging calculations
     }
 
     @Override
     public void addOrder(Order order) {
-        orderList.add(documentService.createOrderDocument(order));
+        OrderDocument od = documentService.createOrderDocument(order);
+        numDocuments += od.getDocuments().size();
+        orderList.add(od);
         saveOrder(order);
     }
 
@@ -43,11 +53,22 @@ public class OrderServiceImpl implements OrderService {
         orderList.add(0, recallList.pop());
     }
 
+    /**
+     *
+     * @param i Text pane to bump
+     */
     @Override
-    public void bumpOrder(int textPane) {
+    public void bumpOrder(int i) {
         // TODO: 4/24/2018
-        log.info("Bump " + textPane);
-//        saveOrder();
+        OrderDocument od = orderList.get(i);
+        Order o = od.getOrder();
+
+
+
+
+        log.info("Bump " + i);
+        o.setBumpTime(LocalDateTime.now());
+        saveOrder(o);
     }
 
     @Override
