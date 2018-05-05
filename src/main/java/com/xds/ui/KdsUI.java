@@ -1,4 +1,4 @@
-package com.xds.UI;
+package com.xds.ui;
 
 import javax.swing.*;
 

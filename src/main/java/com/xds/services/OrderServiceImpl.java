@@ -1,74 +1,94 @@
 package com.xds.services;
 
-import com.xds.UI.DocumentService;
-import com.xds.UI.TextPaneService;
-import com.xds.UI.TimerService;
+import com.xds.ui.DocumentService;
+import com.xds.ui.OrderPaneService;
+import com.xds.ui.TimerService;
+import com.xds.config.SwingProperties;
 import com.xds.domain.Order;
-import com.xds.domain.OrderDocument;
+import com.xds.uiComponents.OrderDocument;
+import com.xds.uiComponents.OrderPane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
 import java.time.LocalDateTime;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final DocumentService documentService;
     private final TimerService timerService;
-    private final TextPaneService textPaneService;
+    private final OrderPaneService orderPaneService;
+    private final SwingProperties properties;
 
     private List<OrderDocument> orderList;
-    private Deque<OrderDocument> recallList;
+    private Deque<Order> recallList;
 
     private Integer currentPage;
-    private Integer numDocuments;
 
-    public OrderServiceImpl(DocumentService documentService, TimerService timerService, TextPaneService textPaneService) {
+    private Document dummyDocument = new DefaultStyledDocument();
+
+    public OrderServiceImpl(DocumentService documentService, TimerService timerService, OrderPaneService orderPaneService, SwingProperties properties) {
         this.documentService = documentService;
         this.timerService = timerService;
-        this.textPaneService = textPaneService;
+        this.orderPaneService = orderPaneService;
+        this.properties = properties;
 
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
 
         currentPage = 0;
-        numDocuments = 0; //Tracks total number of documents for paging calculations
     }
 
     @Override
-    public void addOrder(Order order) {
-        OrderDocument od = documentService.createOrderDocument(order);
-        numDocuments += od.getDocuments().size();
-        orderList.add(od);
-        saveOrder(order);
+    public void addOrder(Order o) {
+        documentService.createOrderDocuments(o);
+        orderList.addAll(o.getDocuments());
+        saveOrder(o);
+        log.info("Order added");
+        updateOrders();
     }
 
     @Override
     public void recallOrder() {
         log.info("recall order");
-        orderList.add(0, recallList.pop());
+        Order o = recallList.pop();
+        orderList.addAll(0, o.getDocuments());
     }
 
     /**
-     *
      * @param i Text pane to bump
      */
     @Override
     public void bumpOrder(int i) {
         // TODO: 4/24/2018
-        OrderDocument od = orderList.get(i);
-        Order o = od.getOrder();
-
-
-
-
+        OrderPane orderPane = orderPaneService.getPane(i);
         log.info("Bump " + i);
-        o.setBumpTime(LocalDateTime.now());
-        saveOrder(o);
+        if (!orderPane.isEmpty()){ //check to see if panel is empty
+            OrderDocument oDocument = orderPane.getOrderDocument();
+            Order order = oDocument.getOrder();
+
+            this.orderList = // This should filter out all OrderDocuments with the same order
+                    orderList.stream()
+                    .filter(t -> t.getOrder() != order)
+                    .collect(Collectors.toList());
+
+            recallList.push(order);
+            if (recallList.size() > properties.getMaxRecall()){
+                recallList.poll();
+            }
+            log.info("Order Cleared");
+            order.setBumpTime(LocalDateTime.now());
+            saveOrder(order);
+            updateOrders();
+        }
     }
 
     @Override
@@ -79,7 +99,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrders() {
-        // TODO: 5/3/2018  
+        Iterator<OrderDocument> orders = orderList.iterator();
+
+        for (OrderPane orderPane : orderPaneService.getPanes()) {
+            if (orders.hasNext()){
+                orderPane.setOrderDocument(orders.next());
+            }
+            else {
+                orderPane.clearPane(dummyDocument);
+            }
+        }
+        log.info("Orders Updated");
     }
 
     @Override

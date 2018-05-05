@@ -1,6 +1,8 @@
-package com.xds.UI;
+package com.xds.services;
 
-import com.xds.services.OrderService;
+import com.xds.ui.KdsUI;
+import com.xds.ui.OrderPaneService;
+import com.xds.uiComponents.OrderPane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -9,19 +11,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 @Slf4j
-public class KeyBindingServiceImpl implements KeyBindingService{
+public class KeyBindingServiceImpl implements KeyBindingService {
 
     private final KdsUI kdsUI;
     private final OrderService orderService;
-    private final TextPaneService textPaneService;
+    private final OrderPaneService orderPaneService;
 
-    public KeyBindingServiceImpl(KdsUI kdsUI, OrderService orderService, TextPaneService textPaneService) {
+    public KeyBindingServiceImpl(KdsUI kdsUI, OrderService orderService, OrderPaneService orderPaneService) {
         this.kdsUI = kdsUI;
         this.orderService = orderService;
-        this.textPaneService = textPaneService;
+        this.orderPaneService = orderPaneService;
         initBindings();
     }
 
@@ -33,9 +36,9 @@ public class KeyBindingServiceImpl implements KeyBindingService{
         }
         bindPageHome("H");
 
-        Iterator<JTextPane> panes = textPaneService.getPanes();
+        List<OrderPane> panes = orderPaneService.getPanes();
         for (int i = 0; i < 10; i++) {
-            JTextPane p = panes.next();
+            OrderPane p = panes.get(i);
             bindRecall("BACK_SPACE", p);
             bindPageLeft("LEFT", p);
             bindPageRight("RIGHT", p);

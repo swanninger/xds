@@ -2,6 +2,8 @@ package com.xds.domain;
 
 import lombok.Data;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -11,8 +13,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Plate {
 
     private final String name;
+    private List<String> categories = new LinkedList<>();
+    private List<String> sides = new LinkedList<>();
 
-    private CopyOnWriteArrayList<String> categories;
+    public Plate(String name) {
+        this.name = name;
 
-    private CopyOnWriteArrayList<String> sides;
+    }
+
+    public Plate addSide(String s){
+        this.sides.add(s);
+        return this;
+    }
+
 }

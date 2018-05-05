@@ -1,4 +1,4 @@
-package com.xds.UI;
+package com.xds.services;
 
 public interface KeyBindingService {
 

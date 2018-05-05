@@ -1,7 +1,7 @@
-package com.xds.UI;
+package com.xds.ui;
 
 import com.xds.domain.Order;
-import com.xds.domain.OrderDocument;
+import com.xds.uiComponents.OrderDocument;
 import com.xds.domain.Plate;
 import com.xds.services.KdsStyles;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.util.LinkedList;
@@ -22,22 +21,25 @@ import java.util.LinkedList;
 @Slf4j
 public class DocumentServiceImpl implements DocumentService {
     private final KdsStyles kdsStyles;
-    private final TextPaneService textPaneService;
+    private final OrderPaneService orderPaneService;
 
     private Dimension dimension;
     private JTextPane dummyPane;
 
-    public DocumentServiceImpl(KdsStyles kdsStyles, TextPaneService textPaneService) {
+    public DocumentServiceImpl(KdsStyles kdsStyles, OrderPaneService orderPaneService) {
         this.kdsStyles = kdsStyles;
-        this.textPaneService = textPaneService;
+        this.orderPaneService = orderPaneService;
+
+        dimension = new Dimension();
+        dummyPane = new JTextPane();
     }
 
     @Override
-    public OrderDocument createOrderDocument(Order order) {
-        this.dimension = textPaneService.getSize(dimension);
+    public void createOrderDocuments(Order order) {
+        this.dimension = orderPaneService.getSize(dimension);
 
-        LinkedList<Document> documents = new LinkedList<>();
-        Document d = new DefaultStyledDocument();
+        LinkedList<OrderDocument> documents = new LinkedList<>();
+        OrderDocument d = new OrderDocument();
 
         // Create Header and insert into first document
         try {
@@ -56,7 +58,11 @@ public class DocumentServiceImpl implements DocumentService {
                 insertSide(s, d);
             }
         }
-        return new OrderDocument(documents, order);
+        order.setDocuments(documents);
+        for (OrderDocument od : documents){
+            od.setOrder(order);
+        }
+
     }
 
     private void insertMain(String s, Document d) {
@@ -76,13 +82,13 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     // Checks document length to see if a new page needs to be created
-    private void checkDocumentLength(LinkedList<Document> documents, Document d) {
+    private void checkDocumentLength(LinkedList<OrderDocument> documents, Document d) {
         if (getDocumentHeight(d) > (dimension.height - (kdsStyles.getFontSize() * 1.6))) {
             try {
                 d.insertString(d.getLength(), "  --->", kdsStyles.getContTextStyle());
-                d = new DefaultStyledDocument();
+                d = new OrderDocument();
                 d.insertString(0, " CONTINUED From ", kdsStyles.getContTextStyle());
-                documents.add(new DefaultStyledDocument());
+                documents.add(new OrderDocument());
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -91,13 +97,10 @@ public class DocumentServiceImpl implements DocumentService {
 
     /**
      * @param content the document to check
-     * @return the height of the document as int
+     * @return the height of the document as float
      */
     private float getDocumentHeight(Document content) {
-        if (dummyPane == null) {
-            dummyPane = new JTextPane();
-            dummyPane.setSize(dimension);
-        }
+        dummyPane.setSize(dimension);
         dummyPane.setDocument(content);
 
         return dummyPane.getPreferredSize().height;

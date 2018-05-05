@@ -14,11 +14,13 @@ import java.awt.*;
 public class SwingProperties {
 
     private String displayLabelText;
+    private int maxRecall;
+
+
+//    Styles
+    private int fontSize;
 
     private Color newTime;
     private Color oldTime;
     private Color lateTime;
-
-//    Styles
-    private int fontSize;
 }

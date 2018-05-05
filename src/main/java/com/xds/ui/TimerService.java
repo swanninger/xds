@@ -1,4 +1,4 @@
-package com.xds.UI;
+package com.xds.ui;
 
 import javax.swing.*;
 import java.util.Iterator;
@@ -9,6 +9,7 @@ import java.util.Iterator;
 public interface TimerService {
 
     Iterator<JLabel> getTimers();
+    JLabel getTimer(int i);
+//    void updateTimers();
 
-    void updateTimers();
 }

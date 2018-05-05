@@ -1,11 +1,11 @@
-package com.xds.UI;
+package com.xds.ui;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Service
 public class TimerServiceImpl implements TimerService {
-    private Collection<JLabel> timers;
+    private List<JLabel> timers;
 
     public TimerServiceImpl() {
         initTimers();
@@ -30,9 +30,13 @@ public class TimerServiceImpl implements TimerService {
         return timers.iterator();
     }
 
-    @Override
-    @Scheduled(fixedRate = 5000)
-    public void updateTimers() {
-        // TODO: 4/24/2018
+    public JLabel getTimer(int i) {
+        return timers.get(i);
     }
+
+//    @Override
+//    @Scheduled(fixedRate = 5000)
+//    public void updateTimers() {
+//
+//    }
 }

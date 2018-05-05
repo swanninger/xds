@@ -1,11 +1,13 @@
-package com.xds.UI;
+package com.xds.ui;
 
 import com.xds.config.SwingProperties;
+import com.xds.uiComponents.OrderPane;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by PhazedOut on 2/26/2018.
@@ -15,7 +17,7 @@ import java.util.Iterator;
 public class KdsUIImpl extends JFrame implements KdsUI{
 
     private final SwingProperties swingProperties;
-    private final TextPaneService textPaneService;
+    private final OrderPaneService orderPaneService;
     private final TimerService timerService;
 
     private JLabel alert;
@@ -25,10 +27,10 @@ public class KdsUIImpl extends JFrame implements KdsUI{
     private JLabel displayLabel;
 
 
-    public KdsUIImpl(SwingProperties swingProperties, TextPaneService textPaneService, TimerService timerService){
+    public KdsUIImpl(SwingProperties swingProperties, OrderPaneService orderPaneService, TimerService timerService){
         super();
         this.swingProperties = swingProperties;
-        this.textPaneService = textPaneService;
+        this.orderPaneService = orderPaneService;
         this.timerService = timerService;
 
         initComponents();
@@ -36,7 +38,7 @@ public class KdsUIImpl extends JFrame implements KdsUI{
     }
 
     private void initComponents(){
-        setTitle("Hello");
+        setTitle("piKDS");
         this.setUndecorated(true);
         setExtendedState(Frame.MAXIMIZED_BOTH);
 
@@ -61,14 +63,14 @@ public class KdsUIImpl extends JFrame implements KdsUI{
 
         Font font = new Font("Helvetica", Font.PLAIN, 12);
 
-        Iterator<JTextPane> textPaneIterator = textPaneService.getPanes();
+        List<OrderPane> orderPanes = orderPaneService.getPanes();
         Iterator<JLabel> timerIterator = timerService.getTimers();
 
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
             JLabel name = new JLabel();
             JLabel timer = timerIterator.next();
-            JTextPane text = textPaneIterator.next();
+            OrderPane text = orderPanes.get(i);
 
 
             panel.setBackground(kdsGrey);
@@ -89,7 +91,6 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             timer.setBackground(kdsGrey);
             timer.setForeground(Color.WHITE);
             timer.setHorizontalAlignment(SwingConstants.CENTER);
-//            timer.setText("00 : 00 : 00 ");
             timer.setOpaque(true);
             timer.setFont(font);
 
