@@ -1,6 +1,9 @@
 package com.xds.ui;
 
 import com.xds.uiComponents.OrderPane;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -10,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Scott Wanninger on 3/12/2018.
  */
+@Slf4j
 @Service
 public class OrderPaneServiceImpl implements OrderPaneService {
     private List<OrderPane> panes;
@@ -47,5 +51,14 @@ public class OrderPaneServiceImpl implements OrderPaneService {
     @Override
     public List<OrderPane> getPanes(){
         return panes;
+    }
+
+    @Override
+    @Scheduled(fixedDelay = 1000)
+    @Async
+    public void updateTimers() {
+        for (OrderPane orderPane : panes) {
+            orderPane.updateTimer();
+        }
     }
 }

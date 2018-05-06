@@ -50,11 +50,15 @@ public class DocumentServiceImpl implements DocumentService {
         documents.add(d);
 
         for (Plate p : order.getPlates()) {
-            checkDocumentLength(documents, d);
+            if (checkDocumentLength(documents, d)){
+                d = documents.getLast();
+            }
             insertMain(p.getName(), d);
 
             for (String s : p.getSides()) {
-                checkDocumentLength(documents, d);
+                if (checkDocumentLength(documents, d)){
+                    d = documents.getLast();
+                }
                 insertSide(s, d);
             }
         }
@@ -62,6 +66,7 @@ public class DocumentServiceImpl implements DocumentService {
         for (OrderDocument od : documents){
             od.setOrder(order);
         }
+        log.info("Order added with " + documents.size() + " docs");
 
     }
 
@@ -82,17 +87,19 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     // Checks document length to see if a new page needs to be created
-    private void checkDocumentLength(LinkedList<OrderDocument> documents, Document d) {
+    private boolean checkDocumentLength(LinkedList<OrderDocument> documents, OrderDocument d) {
         if (getDocumentHeight(d) > (dimension.height - (kdsStyles.getFontSize() * 1.6))) {
             try {
                 d.insertString(d.getLength(), "  --->", kdsStyles.getContTextStyle());
                 d = new OrderDocument();
-                d.insertString(0, " CONTINUED From ", kdsStyles.getContTextStyle());
-                documents.add(new OrderDocument());
+                d.insertString(0, "-- CONTINUED --", kdsStyles.getContTextStyle());
+                documents.add(d);
+                return true;
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
     /**

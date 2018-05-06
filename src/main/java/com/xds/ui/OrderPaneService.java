@@ -13,4 +13,5 @@ public interface OrderPaneService {
     List<OrderPane> getPanes();
     Dimension getSize(Dimension dimension);
     OrderPane getPane(int i);
+    void updateTimers();
 }

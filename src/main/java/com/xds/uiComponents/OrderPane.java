@@ -2,11 +2,12 @@ package com.xds.uiComponents;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.swing.*;
 import javax.swing.text.Document;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 
 public class OrderPane extends JTextPane {
     @Getter
@@ -15,6 +16,7 @@ public class OrderPane extends JTextPane {
     private JLabel timerLabel;
     @Getter @Setter
     private boolean empty = true;
+    private LocalDateTime orderTime;
 
     public void clearPane(Document d){
         setEmpty(true);
@@ -25,15 +27,16 @@ public class OrderPane extends JTextPane {
     public void setOrderDocument(OrderDocument orderDocument) {
         this.orderDocument = orderDocument;
         this.setDocument(orderDocument);
+        this.orderTime = orderDocument.getOrder().getOrderTime();
         setEmpty(false);
-        timerLabel.setText(orderDocument.getOrder().getOrderTime().toString());
+        timerLabel.setText(orderTime.toLocalTime().toString());
     }
 
-    @Scheduled(fixedRate = 1000)
-    @Async
-    public void updateTimers() {
+    public void updateTimer() {
         if (!isEmpty()){
-            timerLabel.setText(orderDocument.getOrder().getOrderTime().toString());
+//            orderTime = orderDocument.getOrder().getOrderTime().toLocalTime();
+//
+//            timerLabel.setText((LocalTime.now().minus(orderDocument.getOrder().getOrderTime().toLocalTime()).toString());
         }
     }
 }

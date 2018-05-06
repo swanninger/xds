@@ -61,6 +61,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("recall order");
         Order o = recallList.pop();
         orderList.addAll(0, o.getDocuments());
+        updateOrders();
     }
 
     /**
@@ -68,7 +69,6 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void bumpOrder(int i) {
-        // TODO: 4/24/2018
         OrderPane orderPane = orderPaneService.getPane(i);
         log.info("Bump " + i);
         if (!orderPane.isEmpty()){ //check to see if panel is empty
