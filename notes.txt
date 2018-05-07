@@ -1,11 +1,3 @@
 ToDo
 --------------------------------------------------
 - might need to implement look and feel to metal
-- move labels and create new interface LabelService
-
-OrderService
-------------------------------
-- implement updateOrders
-- implement bumpOrders
-- implement paging
-- implement saveOrder
