@@ -1,4 +1,4 @@
-package com.xds.uiComponents;
+package com.xds.ui.extensions;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.swing.*;
 import javax.swing.text.Document;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 
 public class OrderPane extends JTextPane {

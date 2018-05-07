@@ -1,6 +1,6 @@
 package com.xds.ui;
 
-import com.xds.uiComponents.OrderPane;
+import com.xds.ui.extensions.OrderPane;
 
 import java.awt.*;
 import java.util.List;

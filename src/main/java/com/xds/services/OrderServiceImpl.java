@@ -1,11 +1,12 @@
 package com.xds.services;
 
 import com.xds.ui.DocumentService;
+import com.xds.ui.LabelService;
 import com.xds.ui.OrderPaneService;
 import com.xds.config.SwingProperties;
 import com.xds.domain.Order;
-import com.xds.uiComponents.OrderDocument;
-import com.xds.uiComponents.OrderPane;
+import com.xds.ui.extensions.OrderDocument;
+import com.xds.ui.extensions.OrderPane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
     private final DocumentService documentService;
     private final OrderPaneService orderPaneService;
     private final SwingProperties properties;
+    private final LabelService labelService;
 
     private List<OrderDocument> orderList;
     private Deque<Order> recallList;
@@ -33,10 +35,11 @@ public class OrderServiceImpl implements OrderService {
 
     private Document dummyDocument = new DefaultStyledDocument();
 
-    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService, SwingProperties properties) {
+    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService, SwingProperties properties, LabelService labelService) {
         this.documentService = documentService;
         this.orderPaneService = orderPaneService;
         this.properties = properties;
+        this.labelService = labelService;
 
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
@@ -68,17 +71,17 @@ public class OrderServiceImpl implements OrderService {
     public void bumpOrder(int i) {
         OrderPane orderPane = orderPaneService.getPane(i);
         log.info("Bump " + i);
-        if (!orderPane.isEmpty()){ //check to see if panel is empty
+        if (!orderPane.isEmpty()) { //check to see if panel is empty
             OrderDocument oDocument = orderPane.getOrderDocument();
             Order order = oDocument.getOrder();
 
             this.orderList = // This should filter out all OrderDocuments with the same order
                     orderList.stream()
-                    .filter(t -> t.getOrder() != order)
-                    .collect(Collectors.toList());
+                            .filter(t -> t.getOrder() != order)
+                            .collect(Collectors.toList());
 
             recallList.push(order);
-            if (recallList.size() > properties.getMaxRecall()){
+            if (recallList.size() > properties.getMaxRecall()) {
                 recallList.poll();
             }
             log.info("Order Cleared");
@@ -96,13 +99,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrders() {
-        Iterator<OrderDocument> orders = orderList.iterator();
+        Iterator<OrderDocument> orders = orderList.listIterator(currentPage * 10);
 
         for (OrderPane orderPane : orderPaneService.getPanes()) {
-            if (orders.hasNext()){
+            if (orders.hasNext()) {
                 orderPane.setOrderDocument(orders.next());
-            }
-            else {
+            } else {
                 orderPane.clearPane(dummyDocument);
             }
         }
@@ -112,39 +114,37 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void pageRight() {
         log.info("Page Right");
-//                System.out.println(orderList.size() / paneList.size());
-//                if (numDocuments / paneList.size() > currentPage) {
-//                    currentPage++;
-//                    page.setText("Page " + (currentPage + 1) + " ");
-//                    updateOrders();
-//                } else {
-//                    System.out.println("No more pages");
-//                }
-//                currentPage++;
-//                page.setText("Page " + (currentPage + 1) + " ");
+
+        if (orderList.size() / 10 > currentPage) {
+            currentPage++;
+            labelService.setPageText("Page " + (currentPage + 1) + " ");
+            updateOrders();
+        } else {
+            log.info("No more pages");
+        }
     }
 
     @Override
     public void pageLeft() {
         log.info("Page Left");
-//                if (currentPage > 0) {
-//                    currentPage--;
-//                    page.setText("Page " + (currentPage + 1) + " ");
-//                    updateOrders();
-//                } else {
-//                    System.out.println("At first page");
-//                }
+        if (currentPage > 0) {
+            currentPage--;
+            labelService.setPageText("Page " + (currentPage + 1) + " ");
+            updateOrders();
+        } else {
+            log.info("At first page");
+        }
     }
 
     @Override
     public void pageHome() {
         log.info("Home");
-//                if (currentPage != 0) {
-//                    currentPage = 0;
-//                    page.setText("Page 1");
-//                    updateOrders();
-//                } else {
-//                    System.out.println("Already Home");
-//                }
+        if (currentPage != 0) {
+            currentPage = 0;
+            labelService.setPageText("Page 1");
+            updateOrders();
+        } else {
+            log.info("Already Home");
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.xds.domain;
 
-import com.xds.uiComponents.OrderDocument;
+import com.xds.ui.extensions.OrderDocument;
 import lombok.Data;
 
 import javax.persistence.Transient;

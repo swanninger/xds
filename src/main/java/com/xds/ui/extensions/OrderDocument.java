@@ -1,5 +1,4 @@
-package com.xds.uiComponents;
-
+package com.xds.ui.extensions;
 
 import com.xds.domain.Order;
 import lombok.Getter;

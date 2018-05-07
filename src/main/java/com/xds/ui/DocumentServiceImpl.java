@@ -1,7 +1,7 @@
 package com.xds.ui;
 
 import com.xds.domain.Order;
-import com.xds.uiComponents.OrderDocument;
+import com.xds.ui.extensions.OrderDocument;
 import com.xds.domain.Plate;
 import com.xds.services.KdsStyles;
 import lombok.extern.slf4j.Slf4j;

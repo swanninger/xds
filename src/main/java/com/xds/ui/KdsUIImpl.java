@@ -1,7 +1,7 @@
 package com.xds.ui;
 
 import com.xds.config.SwingProperties;
-import com.xds.uiComponents.OrderPane;
+import com.xds.ui.extensions.OrderPane;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -19,19 +19,16 @@ public class KdsUIImpl extends JFrame implements KdsUI{
     private final SwingProperties swingProperties;
     private final OrderPaneService orderPaneService;
     private final TimerService timerService;
-
-    private JLabel alert;
+    private final LabelService labelService;
     private JPanel mainPanel;
-    private JLabel page;
-
-    private JLabel displayLabel;
 
 
-    public KdsUIImpl(SwingProperties swingProperties, OrderPaneService orderPaneService, TimerService timerService){
+    public KdsUIImpl(SwingProperties swingProperties, OrderPaneService orderPaneService, TimerService timerService, LabelService labelService){
         super();
         this.swingProperties = swingProperties;
         this.orderPaneService = orderPaneService;
         this.timerService = timerService;
+        this.labelService = labelService;
 
         initComponents();
         setVisible(true);
@@ -45,9 +42,10 @@ public class KdsUIImpl extends JFrame implements KdsUI{
         mainPanel = new JPanel();
 
         JPanel bottomPanel = new JPanel();
-        displayLabel = new JLabel();
-        alert = new JLabel();
-        page = new JLabel();
+
+        JLabel displayLabel = labelService.getDisplayName();
+        JLabel alert = labelService.getAlert();
+        JLabel page = labelService.getPageNumber();
         Box.Filler filler1 = new Box.Filler(new Dimension(0, 20), new Dimension(0, 20), new Dimension(32767, 20));
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -71,7 +69,6 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             JLabel name = new JLabel();
             JLabel timer = timerIterator.next();
             OrderPane text = orderPanes.get(i);
-
 
             panel.setBackground(kdsGrey);
             panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -168,18 +165,6 @@ public class KdsUIImpl extends JFrame implements KdsUI{
         );
 
         pack();
-    }
-
-    public void setDisplayLabel(String displayLabel) {
-        this.displayLabel.setText(displayLabel);
-    }
-
-    public void setAlert(String alertString) {
-        this.alert.setText(alertString);
-    }
-
-    public void setPageNum(String pageNum) {
-        this.page.setText(pageNum);
     }
 
     public JPanel getMainPanel() {
