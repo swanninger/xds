@@ -2,7 +2,6 @@ package com.xds.services;
 
 import com.xds.ui.DocumentService;
 import com.xds.ui.OrderPaneService;
-import com.xds.ui.TimerService;
 import com.xds.config.SwingProperties;
 import com.xds.domain.Order;
 import com.xds.uiComponents.OrderDocument;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final DocumentService documentService;
-    private final TimerService timerService;
     private final OrderPaneService orderPaneService;
     private final SwingProperties properties;
 
@@ -35,9 +33,8 @@ public class OrderServiceImpl implements OrderService {
 
     private Document dummyDocument = new DefaultStyledDocument();
 
-    public OrderServiceImpl(DocumentService documentService, TimerService timerService, OrderPaneService orderPaneService, SwingProperties properties) {
+    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService, SwingProperties properties) {
         this.documentService = documentService;
-        this.timerService = timerService;
         this.orderPaneService = orderPaneService;
         this.properties = properties;
 
