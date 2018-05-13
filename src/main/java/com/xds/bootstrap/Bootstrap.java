@@ -29,44 +29,47 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
         orderService.addOrder(order);
 
-        order = new Order(1, LocalDateTime.now(), "Dine-In");
+        for (int i = 0; i < 10; i++) {
+            order = new Order(1, LocalDateTime.now(), "Dine-In");
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
-        order.addPlate(p);
+            p = new Plate("BBQ");
+            p.addSide("fries");
+            p.addSide("coke");
+            order.addPlate(p);
 
-        orderService.addOrder(order);
+            orderService.addOrder(order);
+        }
+
 
     }
 }
