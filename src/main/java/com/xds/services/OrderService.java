@@ -19,4 +19,6 @@ public interface OrderService {
     void pageLeft();
 
     void pageHome();
+
+    void pageLast();
 }

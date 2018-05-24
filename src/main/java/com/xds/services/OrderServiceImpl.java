@@ -1,5 +1,6 @@
 package com.xds.services;
 
+import com.xds.repositories.OrderRepository;
 import com.xds.ui.DocumentService;
 import com.xds.ui.LabelService;
 import com.xds.ui.OrderPaneService;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderPaneService orderPaneService;
     private final SwingProperties properties;
     private final LabelService labelService;
+    private final OrderRepository orderRepository;
 
     private List<OrderDocument> orderList;
     private Deque<Order> recallList;
@@ -35,11 +37,12 @@ public class OrderServiceImpl implements OrderService {
 
     private Document dummyDocument = new DefaultStyledDocument();
 
-    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService, SwingProperties properties, LabelService labelService) {
+    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService, SwingProperties properties, LabelService labelService, OrderRepository orderRepository) {
         this.documentService = documentService;
         this.orderPaneService = orderPaneService;
         this.properties = properties;
         this.labelService = labelService;
+        this.orderRepository = orderRepository;
 
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
@@ -87,13 +90,15 @@ public class OrderServiceImpl implements OrderService {
             log.info("Order Cleared");
             order.setBumpTime(LocalDateTime.now());
             saveOrder(order);
-            updateOrders();
+            if (currentPage > orderList.size()/10){
+                pageLast();
+            }else updateOrders();
         }
     }
 
     @Override
     public Boolean saveOrder(Order order) {
-        // TODO: 4/24/2018
+        orderRepository.save(order);
         return null;
     }
 
@@ -146,5 +151,11 @@ public class OrderServiceImpl implements OrderService {
         } else {
             log.info("Already Home");
         }
+    }
+
+    @Override
+    public void pageLast() {
+        currentPage = orderList.size()/10;
+        updateOrders();
     }
 }

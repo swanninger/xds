@@ -1,29 +1,42 @@
 package com.xds.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import javax.persistence.*;
+import java.util.*;
 
 /**
  * Created by PhazedOut on 3/29/2018.
  */
 @Data
+@Entity
+@Table(name = "plates")
 public class Plate {
 
-    private final String name;
-    private List<String> categories = new LinkedList<>();
-    private List<String> sides = new LinkedList<>();
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+
+    private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @OneToMany(mappedBy = "plate_id")
+    private List<Mod> mods = new LinkedList<>();
+
+    private Integer qty;
 
     public Plate(String name) {
         this.name = name;
-
     }
 
-    public Plate addSide(String s){
-        this.sides.add(s);
+    public Plate addMod(String name, Integer qty){
+        this.mods.add(new Mod(name, qty));
         return this;
     }
-
 }

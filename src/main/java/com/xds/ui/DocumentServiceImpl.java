@@ -1,5 +1,6 @@
 package com.xds.ui;
 
+import com.xds.domain.Mod;
 import com.xds.domain.Order;
 import com.xds.ui.extensions.OrderDocument;
 import com.xds.domain.Plate;
@@ -43,7 +44,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         // Create Header and insert into first document
         try {
-            d.insertString(0, order.getOrderType() + "\n" + order.getOrderTime() + "\n", kdsStyles.getHeadTextStyle());
+            d.insertString(0, order.getOrderMode() + "\n" + order.getOrderTime() + "\n", kdsStyles.getHeadTextStyle());
         } catch (BadLocationException e) {
             log.error("Error inserting Header");
         }
@@ -55,11 +56,11 @@ public class DocumentServiceImpl implements DocumentService {
             }
             insertMain(p.getName(), d);
 
-            for (String s : p.getSides()) {
+            for (Mod m : p.getMods()) {
                 if (checkDocumentLength(documents, d)){
                     d = documents.getLast();
                 }
-                insertSide(s, d);
+                insertSide(m, d);
             }
         }
         order.setDocuments(documents);
@@ -78,9 +79,9 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    private void insertSide(String s, Document d) {
+    private void insertSide(Mod mod, Document d) {
         try {
-            d.insertString(d.getLength(), "\n      " + s, kdsStyles.getSideTextStyle());
+            d.insertString(d.getLength(), "\n      " + mod, kdsStyles.getSideTextStyle());
         } catch (BadLocationException e) {
             e.printStackTrace();
         }

@@ -23,8 +23,8 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Order order = new Order(1, LocalDateTime.now(), "ToGo");
 
         Plate p = new Plate("BBQ");
-        p.addSide("fries");
-        p.addSide("coke");
+        p.addMod("fries",1);
+        p.addMod("coke",1);
         order.addPlate(p);
 
         orderService.addOrder(order);
@@ -33,38 +33,43 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
             order = new Order(1, LocalDateTime.now(), "Dine-In");
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             p = new Plate("BBQ");
-            p.addSide("fries");
-            p.addSide("coke");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
+            order.addPlate(p);
+
+            p = new Plate("BBQ");
+            p.addMod("fries",1);
+            p.addMod("coke",1);
             order.addPlate(p);
 
             orderService.addOrder(order);
