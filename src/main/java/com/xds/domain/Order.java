@@ -31,23 +31,13 @@ public class Order {
 
     private LocalDateTime bumpTime;
 
+    private String nameOnOrder;
+
     @OneToMany(mappedBy = "order")
     private List<Plate> plates = new LinkedList<>();
 
     @Transient
     private List<OrderDocument> documents;
-
-
-    public Order(int orderNumber, LocalDateTime orderTime, String orderMode) {
-        this.orderNumber = orderNumber;
-        this.orderTime = orderTime;
-        this.orderMode = orderMode;
-    }
-
-    public Order(int orderNumber, LocalDateTime orderTime) {
-        this.orderNumber = orderNumber;
-        this.orderTime = orderTime;
-    }
 
     public Order addPlate(Plate p){
         plates.add(p);

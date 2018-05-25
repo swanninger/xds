@@ -20,9 +20,13 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        Order order = new Order(1, LocalDateTime.now(), "ToGo");
+        Order order = new Order();
+        order.setOrderNumber(1);
+        order.setOrderTime(LocalDateTime.now());
+        order.setOrderMode("ToGo");
 
-        Plate p = new Plate("BBQ");
+        Plate p = new Plate();
+        p.setName("BBQ");
         p.addMod("fries",1);
         p.addMod("coke",1);
         order.addPlate(p);
@@ -30,48 +34,46 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         orderService.addOrder(order);
 
         for (int i = 0; i < 10; i++) {
-            order = new Order(1, LocalDateTime.now(), "Dine-In");
+            order = new Order();
+            order.setOrderNumber(i+1);
+            order.setOrderTime(LocalDateTime.now());
+            order.setOrderMode("Dine-In");
 
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
+            p = new Plate();
+            p.setName("BBQ");
             p.addMod("fries",1);
             p.addMod("coke",1);
             order.addPlate(p);
-
-            p = new Plate("BBQ");
-            p.addMod("fries",1);
-            p.addMod("coke",1);
-            order.addPlate(p);
-
             orderService.addOrder(order);
         }
 

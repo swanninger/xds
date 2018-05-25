@@ -31,10 +31,6 @@ public class Plate {
 
     private Integer qty;
 
-    public Plate(String name) {
-        this.name = name;
-    }
-
     public Plate addMod(String name, Integer qty){
         this.mods.add(new Mod(name, qty));
         return this;

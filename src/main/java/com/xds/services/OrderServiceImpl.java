@@ -1,5 +1,7 @@
 package com.xds.services;
 
+import com.xds.api.v1.mapper.OrderMapper;
+import com.xds.api.v1.model.OrderDTO;
 import com.xds.repositories.OrderRepository;
 import com.xds.ui.DocumentService;
 import com.xds.ui.LabelService;
@@ -29,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final SwingProperties properties;
     private final LabelService labelService;
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     private List<OrderDocument> orderList;
     private Deque<Order> recallList;
@@ -37,12 +40,15 @@ public class OrderServiceImpl implements OrderService {
 
     private Document dummyDocument = new DefaultStyledDocument();
 
-    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService, SwingProperties properties, LabelService labelService, OrderRepository orderRepository) {
+    public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService,
+                            SwingProperties properties, LabelService labelService, OrderRepository orderRepository,
+                            OrderMapper orderMapper) {
         this.documentService = documentService;
         this.orderPaneService = orderPaneService;
         this.properties = properties;
         this.labelService = labelService;
         this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
 
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
@@ -57,6 +63,11 @@ public class OrderServiceImpl implements OrderService {
         saveOrder(o);
         log.info("Order added");
         updateOrders();
+    }
+
+    @Override
+    public void addOrder(OrderDTO orderDTO) {
+        addOrder(orderMapper.orderDtoToOrder(orderDTO));
     }
 
     @Override
@@ -90,9 +101,9 @@ public class OrderServiceImpl implements OrderService {
             log.info("Order Cleared");
             order.setBumpTime(LocalDateTime.now());
             saveOrder(order);
-            if (currentPage > orderList.size()/10){
+            if (currentPage > orderList.size() / 10) {
                 pageLast();
-            }else updateOrders();
+            } else updateOrders();
         }
     }
 
@@ -155,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void pageLast() {
-        currentPage = orderList.size()/10;
+        currentPage = orderList.size() / 10;
         updateOrders();
     }
 }
