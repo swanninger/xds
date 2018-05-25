@@ -11,28 +11,36 @@ import java.util.*;
  */
 @Data
 @Entity
+@EqualsAndHashCode(exclude = {"order_id"})
 @Table(name = "plates")
 public class Plate {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
     private String category;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToMany(mappedBy = "plate_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "plate")
     private List<Mod> mods = new LinkedList<>();
 
     private Integer qty;
 
     public Plate addMod(String name, Integer qty){
-        this.mods.add(new Mod(name, qty));
+        Mod mod = new Mod(name, qty);
+        mod.setPlate(this);
+        this.mods.add(mod);
+        return this;
+    }
+
+    public Plate addMod(Mod mod){
+        mod.setPlate(this);
+        this.mods.add(mod);
         return this;
     }
 }

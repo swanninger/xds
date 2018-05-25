@@ -1,26 +1,27 @@
 package com.xds.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@EqualsAndHashCode(exclude = {"plate"})
 @Table(name = "mods")
 public class Mod {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
     private Integer qty;
 
     @ManyToOne
-    @JoinColumn(name = "plate_id")
-    private Plate plate_id;
+    private Plate plate;
 
+    public Mod(){}
 
     public Mod(String name, Integer qty) {
         this.name = name;

@@ -2,7 +2,6 @@ package com.xds.domain;
 
 import com.xds.ui.extensions.OrderDocument;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ import java.util.List;
 
 @Data
 @Entity
-@EqualsAndHashCode(exclude = "plates")
 @Table(name = "orders")
 public class Order {
 
@@ -24,23 +22,20 @@ public class Order {
     private Long id;
 
     private Integer orderNumber;
-
     private LocalDateTime orderTime;
-
     private String orderMode;
-
     private LocalDateTime bumpTime;
-
     private String nameOnOrder;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<Plate> plates = new LinkedList<>();
 
     @Transient
     private List<OrderDocument> documents;
 
-    public Order addPlate(Plate p){
-        plates.add(p);
+    public Order addPlate(Plate plate){
+        plate.setOrder(this);
+        plates.add(plate);
         return this;
     }
 }

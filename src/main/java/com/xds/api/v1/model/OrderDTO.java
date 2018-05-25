@@ -1,6 +1,5 @@
 package com.xds.api.v1.model;
 
-import com.xds.domain.Plate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,12 +14,5 @@ public class OrderDTO {
     private LocalDateTime orderTime;
     private String orderMode;
     private String nameOnOrder;
-    private List<Plate> plates;
-
-
-    public OrderDTO(Integer orderNumber, LocalDateTime orderTime, List<Plate> plates) {
-        this.orderNumber = orderNumber;
-        this.orderTime = orderTime;
-        this.plates = plates;
-    }
+    private List<PlateDTO> plates;
 }
