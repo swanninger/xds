@@ -11,7 +11,7 @@ import java.util.*;
  */
 @Data
 @Entity
-@EqualsAndHashCode(exclude = {"order_id"})
+@EqualsAndHashCode(exclude = {"order"})
 @Table(name = "plates")
 public class Plate {
 
@@ -23,7 +23,6 @@ public class Plate {
     private String category;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
     private Order order;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "plate")
@@ -31,16 +30,26 @@ public class Plate {
 
     private Integer qty;
 
-    public Plate addMod(String name, Integer qty){
+    public Plate addMod(String name, Integer qty) {
         Mod mod = new Mod(name, qty);
         mod.setPlate(this);
         this.mods.add(mod);
         return this;
     }
 
-    public Plate addMod(Mod mod){
+    public Plate addMod(Mod mod) {
         mod.setPlate(this);
         this.mods.add(mod);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (this.qty != null && this.qty > 1) {
+            sb.append(this.qty + " ");
+        }
+        sb.append(this.name);
+        return sb.toString();
     }
 }

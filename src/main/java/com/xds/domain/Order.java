@@ -1,5 +1,6 @@
 package com.xds.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xds.ui.extensions.OrderDocument;
 import lombok.Data;
 
@@ -26,10 +27,12 @@ public class Order {
     private String orderMode;
     private LocalDateTime bumpTime;
     private String nameOnOrder;
+    private String terminalId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<Plate> plates = new LinkedList<>();
 
+    @JsonIgnore
     @Transient
     private List<OrderDocument> documents;
 

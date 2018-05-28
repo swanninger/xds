@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 /**
@@ -23,6 +24,8 @@ import java.util.LinkedList;
 public class DocumentServiceImpl implements DocumentService {
     private final KdsStyles kdsStyles;
     private final OrderPaneService orderPaneService;
+
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     private Dimension dimension;
     private JTextPane dummyPane;
@@ -44,47 +47,70 @@ public class DocumentServiceImpl implements DocumentService {
 
         // Create Header and insert into first document
         try {
-            d.insertString(0, order.getOrderMode() + "\n" + order.getOrderTime() + "\n", kdsStyles.getHeadTextStyle());
+            d.insertString(0,
+                    createHeader(order),
+                    kdsStyles.getHeadTextStyle());
         } catch (BadLocationException e) {
             log.error("Error inserting Header");
         }
         documents.add(d);
 
-        for (Plate p : order.getPlates()) {
-            if (checkDocumentLength(documents, d)){
-                d = documents.getLast();
-            }
-            insertMain(p.getName(), d);
-
-            for (Mod m : p.getMods()) {
-                if (checkDocumentLength(documents, d)){
+        if (order.getPlates() != null) {
+            for (Plate p : order.getPlates()) {
+                if (checkDocumentLength(documents, d)) {
                     d = documents.getLast();
                 }
-                insertSide(m, d);
+                insertPlate(p, d);
+
+                if (p.getMods() != null) {
+                    for (Mod m : p.getMods()) {
+                        if (checkDocumentLength(documents, d)) {
+                            d = documents.getLast();
+                        }
+                        insertMod(m, d);
+                    }
+                }
             }
         }
+
         order.setDocuments(documents);
-        for (OrderDocument od : documents){
+        for (OrderDocument od : documents) {
             od.setOrder(order);
         }
         log.info("Order added with " + documents.size() + " docs");
 
     }
 
-    private void insertMain(String s, Document d) {
+    private void insertPlate(Plate p, Document d) {
         try {
-            d.insertString(d.getLength(), "\n " + s + " ", kdsStyles.getMainTextStyle());
+            d.insertString(d.getLength(), "\n " + p + " ", kdsStyles.getMainTextStyle());
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
     }
 
-    private void insertSide(Mod mod, Document d) {
+    private void insertMod(Mod mod, Document d) {
         try {
             d.insertString(d.getLength(), "\n      " + mod, kdsStyles.getSideTextStyle());
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+    }
+
+    private String createHeader(Order order){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(order.getOrderMode()).append("   ");
+
+        if (order.getNameOnOrder() != null){
+            sb.append(order.getNameOnOrder());
+        }
+
+        sb.append("\n")
+                .append(order.getOrderTime().format(dtf))
+                .append("\n");
+
+        return sb.toString();
     }
 
     // Checks document length to see if a new page needs to be created

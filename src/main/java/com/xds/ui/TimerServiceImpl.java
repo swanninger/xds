@@ -22,7 +22,9 @@ public class TimerServiceImpl implements TimerService {
     private void initTimers(){
         timers = new CopyOnWriteArrayList<>();
         for (int i = 0; i < 10; i++) {
-            timers.add(new JLabel());
+            JLabel timer = new JLabel();
+            timer.setText("");
+            timers.add(timer);
         }
     }
 
@@ -34,9 +36,4 @@ public class TimerServiceImpl implements TimerService {
         return timers.get(i);
     }
 
-//    @Override
-//    @Scheduled(fixedRate = 5000)
-//    public void updateTimers() {
-//
-//    }
 }

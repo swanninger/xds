@@ -2,7 +2,7 @@ package com.xds.ui;
 
 import javax.swing.*;
 
-public interface KdsUI {
+public interface KdsFrame {
 
     JPanel getMainPanel();
 }

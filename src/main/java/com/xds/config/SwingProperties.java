@@ -20,7 +20,9 @@ public class SwingProperties {
 //    Styles
     private int fontSize;
 
-    private Color newTime;
-    private Color oldTime;
-    private Color lateTime;
+    private String newTime;
+    private String oldTime;
+    private String lateTime;
+
+    private String mainColor;
 }

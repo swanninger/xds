@@ -1,6 +1,6 @@
 package com.xds.services;
 
-import com.xds.ui.KdsUI;
+import com.xds.ui.KdsFrame;
 import com.xds.ui.OrderPaneService;
 import com.xds.ui.extensions.OrderPane;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,12 @@ import java.util.List;
 @Slf4j
 public class KeyBindingServiceImpl implements KeyBindingService {
 
-    private final KdsUI kdsUI;
+    private final KdsFrame kdsFrame;
     private final OrderService orderService;
     private final OrderPaneService orderPaneService;
 
-    public KeyBindingServiceImpl(KdsUI kdsUI, OrderService orderService, OrderPaneService orderPaneService) {
-        this.kdsUI = kdsUI;
+    public KeyBindingServiceImpl(KdsFrame kdsFrame, OrderService orderService, OrderPaneService orderPaneService) {
+        this.kdsFrame = kdsFrame;
         this.orderService = orderService;
         this.orderPaneService = orderPaneService;
         initBindings();
@@ -46,8 +46,8 @@ public class KeyBindingServiceImpl implements KeyBindingService {
     }
 
     private void bindPageHome(String key) {
-        kdsUI.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), "PageHome");
-        kdsUI.getMainPanel().getActionMap().put("PageHome", new AbstractAction() {
+        kdsFrame.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), "PageHome");
+        kdsFrame.getMainPanel().getActionMap().put("PageHome", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 orderService.pageHome();
@@ -89,8 +89,8 @@ public class KeyBindingServiceImpl implements KeyBindingService {
     }
 
     private void bindExit(String key) {
-//        kdsUI.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), "Exit");
-//        kdsUI.getMainPanel().getActionMap().put("Exit", new AbstractAction() {
+//        kdsFrame.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), "Exit");
+//        kdsFrame.getMainPanel().getActionMap().put("Exit", new AbstractAction() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
 //                System.exit(0);
@@ -99,9 +99,9 @@ public class KeyBindingServiceImpl implements KeyBindingService {
     }
 
     public void bindBumpKey(int pane, int key){
-        kdsUI.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("" + key), "Order" + pane);
-        kdsUI.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("NUMPAD" + key), "Order" + pane);
-        kdsUI.getMainPanel().getActionMap().put("Order" + pane, new BumpAction(pane));
+        kdsFrame.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("" + key), "Order" + pane);
+        kdsFrame.getMainPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("NUMPAD" + key), "Order" + pane);
+        kdsFrame.getMainPanel().getActionMap().put("Order" + pane, new BumpAction(pane));
     }
 
     private class BumpAction extends AbstractAction {

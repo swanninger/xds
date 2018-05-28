@@ -1,7 +1,5 @@
 package com.xds.services;
 
-import com.xds.api.v1.mapper.OrderMapper;
-import com.xds.api.v1.model.OrderDTO;
 import com.xds.repositories.OrderRepository;
 import com.xds.ui.DocumentService;
 import com.xds.ui.LabelService;
@@ -31,7 +29,6 @@ public class OrderServiceImpl implements OrderService {
     private final SwingProperties properties;
     private final LabelService labelService;
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
 
     private List<OrderDocument> orderList;
     private Deque<Order> recallList;
@@ -41,14 +38,12 @@ public class OrderServiceImpl implements OrderService {
     private Document dummyDocument = new DefaultStyledDocument();
 
     public OrderServiceImpl(DocumentService documentService, OrderPaneService orderPaneService,
-                            SwingProperties properties, LabelService labelService, OrderRepository orderRepository,
-                            OrderMapper orderMapper) {
+                            SwingProperties properties, LabelService labelService, OrderRepository orderRepository) {
         this.documentService = documentService;
         this.orderPaneService = orderPaneService;
         this.properties = properties;
         this.labelService = labelService;
         this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
 
         this.orderList = new CopyOnWriteArrayList<>();
         this.recallList = new LinkedList<>();
@@ -57,17 +52,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addOrder(Order o) {
+    public Order addOrder(Order o) {
         documentService.createOrderDocuments(o);
         orderList.addAll(o.getDocuments());
-        saveOrder(o);
         log.info("Order added");
         updateOrders();
-    }
-
-    @Override
-    public void addOrder(OrderDTO orderDTO) {
-        addOrder(orderMapper.orderDtoToOrder(orderDTO));
+        return saveOrder(o);
     }
 
     @Override
@@ -108,9 +98,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Boolean saveOrder(Order order) {
-        orderRepository.save(order);
-        return null;
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
     }
 
     @Override
@@ -124,6 +113,7 @@ public class OrderServiceImpl implements OrderService {
                 orderPane.clearPane(dummyDocument);
             }
         }
+        orderPaneService.updateTimers();
         log.info("Orders Updated");
     }
 

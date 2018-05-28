@@ -21,7 +21,8 @@ public class Mod {
     @ManyToOne
     private Plate plate;
 
-    public Mod(){}
+    public Mod() {
+    }
 
     public Mod(String name, Integer qty) {
         this.name = name;
@@ -29,12 +30,12 @@ public class Mod {
     }
 
     @Override
-    public String toString(){
-         StringBuilder sb = new StringBuilder();
-         if (this.qty > 1){
-             sb.append(this.qty);
-         }
-         sb.append(this.name);
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (this.qty != null && this.qty > 1) {
+            sb.append(this.qty + " ");
+        }
+        sb.append(this.name);
         return sb.toString();
     }
 }

@@ -1,19 +1,16 @@
 package com.xds.services;
 
-import com.xds.api.v1.model.OrderDTO;
 import com.xds.domain.Order;
 
 public interface OrderService {
 
-    void addOrder(Order order);
-
-    void addOrder(OrderDTO orderDTO);
+    Order addOrder(Order order);
 
     void recallOrder();
 
     void bumpOrder(int pane);
 
-    Boolean saveOrder(Order order);
+    Order saveOrder(Order order);
 
     void updateOrders();
 

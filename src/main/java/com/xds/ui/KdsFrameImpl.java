@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @Service
-public class KdsUIImpl extends JFrame implements KdsUI{
+public class KdsFrameImpl extends JFrame implements KdsFrame {
 
     private final SwingProperties swingProperties;
     private final OrderPaneService orderPaneService;
@@ -23,7 +23,7 @@ public class KdsUIImpl extends JFrame implements KdsUI{
     private JPanel mainPanel;
 
 
-    public KdsUIImpl(SwingProperties swingProperties, OrderPaneService orderPaneService, TimerService timerService, LabelService labelService){
+    public KdsFrameImpl(SwingProperties swingProperties, OrderPaneService orderPaneService, TimerService timerService, LabelService labelService){
         super();
         this.swingProperties = swingProperties;
         this.orderPaneService = orderPaneService;
@@ -53,9 +53,10 @@ public class KdsUIImpl extends JFrame implements KdsUI{
         setForeground(Color.black);
         setUndecorated(true);
 
-        Color kdsGrey = new Color(99, 101, 102);
+//        Color mainColor = new Color(99, 101, 102);
+        Color mainColor = Color.GRAY;
 
-        mainPanel.setBackground(kdsGrey);
+        mainPanel.setBackground(mainColor);
         mainPanel.setLayout(new GridLayout(2, 5, 3, 3));
         mainPanel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
@@ -70,7 +71,7 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             JLabel timer = timerIterator.next();
             OrderPane text = orderPanes.get(i);
 
-            panel.setBackground(kdsGrey);
+            panel.setBackground(mainColor);
             panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             panel.setOpaque(false);
             panel.setPreferredSize(new Dimension(100, 314));
@@ -80,13 +81,13 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             text.setForeground(Color.WHITE);
             text.setMargin(new Insets(3, 10, 0, 10));
 
-            name.setBackground(kdsGrey);
+            name.setBackground(mainColor);
             name.setForeground(Color.WHITE);
             name.setText(" " + (i + 1));
             name.setFont(font);
 
-            timer.setBackground(kdsGrey);
-            timer.setForeground(Color.WHITE);
+            timer.setBackground(mainColor);
+            timer.setForeground(Color.BLACK);
             timer.setHorizontalAlignment(SwingConstants.CENTER);
             timer.setOpaque(true);
             timer.setFont(font);
@@ -114,10 +115,10 @@ public class KdsUIImpl extends JFrame implements KdsUI{
             mainPanel.add(panel);
         }
 
-        bottomPanel.setBackground(kdsGrey);
+        bottomPanel.setBackground(mainColor);
         bottomPanel.setLayout(new GridLayout(1, 3, 5, 0));
 
-        displayLabel.setBackground(kdsGrey);
+        displayLabel.setBackground(mainColor);
         displayLabel.setFont(new Font("Helvetica", Font.BOLD, 18)); // NOI18N
         displayLabel.setForeground(Color.WHITE);
         displayLabel.setText(swingProperties.getDisplayLabelText());
@@ -126,14 +127,14 @@ public class KdsUIImpl extends JFrame implements KdsUI{
         displayLabel.setPreferredSize(new Dimension(40, 20));
         bottomPanel.add(displayLabel);
 
-        alert.setBackground(kdsGrey);
+        alert.setBackground(mainColor);
         alert.setFont(new Font("Helvetica", Font.BOLD, 12)); // NOI18N
         alert.setForeground(Color.WHITE);
         alert.setHorizontalAlignment(SwingConstants.CENTER);
 //        alert.setText("ALERT!!!");
         bottomPanel.add(alert);
 
-        page.setBackground(kdsGrey);
+        page.setBackground(mainColor);
         page.setFont(new Font("Helvetica", Font.BOLD, 18)); // NOI18N
         page.setForeground(Color.WHITE);
         page.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -141,7 +142,7 @@ public class KdsUIImpl extends JFrame implements KdsUI{
         page.setPreferredSize(new Dimension(14, 14));
         bottomPanel.add(page);
 
-        filler1.setBackground(kdsGrey);
+        filler1.setBackground(mainColor);
 
         javax.swing.GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
