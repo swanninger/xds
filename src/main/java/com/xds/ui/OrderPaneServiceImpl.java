@@ -24,6 +24,8 @@ public class OrderPaneServiceImpl implements OrderPaneService {
     private List<OrderPane> panes;
     private final SwingProperties properties;
 
+    private Dimension dimension = new Dimension();
+
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public OrderPaneServiceImpl(TimerService timerService, SwingProperties properties){
@@ -37,13 +39,14 @@ public class OrderPaneServiceImpl implements OrderPaneService {
         }
     }
 
+
+
     /**
-     * @param dimension optional
      * @return size of the first panes
      */
     @Override
-    public Dimension getSize(Dimension dimension){
-       return panes.get(0).getSize(dimension);
+    public Dimension getSize(){
+       return this.dimension;
     }
     /**
      * @param i index to return, starts @ 0
@@ -71,6 +74,16 @@ public class OrderPaneServiceImpl implements OrderPaneService {
             if (!orderPane.isEmpty()){
                 setTimer(orderPane, currentTime);
             }
+        }
+    }
+
+    @Override
+    public void setMaxSize() {
+        dimension = panes.get(0).getSize();
+
+        for (OrderPane orderPane : panes) {
+//            orderPane.setMaximumSize(dimension);
+//            orderPane.setPreferredSize(dimension);
         }
     }
 

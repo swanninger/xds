@@ -34,13 +34,15 @@ public class DocumentServiceImpl implements DocumentService {
         this.kdsStyles = kdsStyles;
         this.orderPaneService = orderPaneService;
 
-        dimension = new Dimension();
-        dummyPane = new JTextPane();
+        this.dummyPane = new JTextPane();
     }
 
     @Override
     public void createOrderDocuments(Order order) {
-        this.dimension = orderPaneService.getSize(dimension);
+        if(this.dimension == null){
+            this.dimension = orderPaneService.getSize();
+        }
+
 
         LinkedList<OrderDocument> documents = new LinkedList<>();
         OrderDocument d = new OrderDocument();
@@ -77,7 +79,7 @@ public class DocumentServiceImpl implements DocumentService {
         for (OrderDocument od : documents) {
             od.setOrder(order);
         }
-        log.info("Order added with " + documents.size() + " docs");
+//        log.info("Order added with " + documents.size() + " docs");
 
     }
 
@@ -103,7 +105,8 @@ public class DocumentServiceImpl implements DocumentService {
         sb.append(order.getOrderMode()).append("   ");
 
         if (order.getNameOnOrder() != null){
-            sb.append(order.getNameOnOrder());
+            String s = lengthCheck(order.getNameOnOrder());
+            sb.append(s);
         }
 
         sb.append("\n")
@@ -138,5 +141,13 @@ public class DocumentServiceImpl implements DocumentService {
         dummyPane.setDocument(content);
 
         return dummyPane.getPreferredSize().height;
+    }
+
+    private String lengthCheck(String s){
+
+        if(s.length() > kdsStyles.getMaxStringSize()){
+            s = s.substring(0, kdsStyles.getMaxStringSize());
+        }
+        return s;
     }
 }

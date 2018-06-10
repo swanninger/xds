@@ -11,7 +11,8 @@ import java.util.List;
 public interface OrderPaneService {
 
     List<OrderPane> getPanes();
-    Dimension getSize(Dimension dimension);
+    Dimension getSize();
     OrderPane getPane(int i);
     void updateTimers();
+    void setMaxSize();
 }

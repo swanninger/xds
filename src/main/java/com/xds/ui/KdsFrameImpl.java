@@ -32,6 +32,7 @@ public class KdsFrameImpl extends JFrame implements KdsFrame {
 
         initComponents();
         setVisible(true);
+        this.orderPaneService.setMaxSize();
     }
 
     private void initComponents(){

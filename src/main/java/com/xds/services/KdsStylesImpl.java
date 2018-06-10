@@ -24,10 +24,13 @@ public class KdsStylesImpl implements KdsStyles {
     @Getter
     private SimpleAttributeSet contTextStyle;
     @Getter
-    private int fontSize;
+    private Integer fontSize;
+    @Getter
+    private int maxStringSize;
 
     public KdsStylesImpl(SwingProperties properties) {
         this.properties = properties;
+        this.maxStringSize = properties.getMaxStringSize();
         initStyles();
     }
 

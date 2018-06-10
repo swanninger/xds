@@ -20,6 +20,11 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        createOrders();
+
+    }
+
+    private void createOrders(){
         Order order = new Order();
         order.setOrderNumber(1);
         order.setOrderTime(LocalDateTime.now());
@@ -30,6 +35,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         p.addMod("fries",1);
         p.addMod("coke",1);
         order.addPlate(p);
+        order.setNameOnOrder("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
         orderService.addOrder(order);
 
@@ -76,7 +82,5 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
             order.addPlate(p);
             orderService.addOrder(order);
         }
-
-
     }
 }

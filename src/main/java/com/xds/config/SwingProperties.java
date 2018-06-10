@@ -25,4 +25,6 @@ public class SwingProperties {
     private String lateTime;
 
     private String mainColor;
+
+    private int maxStringSize;
 }

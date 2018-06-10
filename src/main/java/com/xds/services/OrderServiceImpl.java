@@ -55,14 +55,14 @@ public class OrderServiceImpl implements OrderService {
     public Order addOrder(Order o) {
         documentService.createOrderDocuments(o);
         orderList.addAll(o.getDocuments());
-        log.info("Order added");
+//        log.info("Order added");
         updateOrders();
         return saveOrder(o);
     }
 
     @Override
     public void recallOrder() {
-        log.info("recall order");
+//        log.info("recall order");
         Order o = recallList.pop();
         orderList.addAll(0, o.getDocuments());
         updateOrders();
@@ -114,12 +114,12 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         orderPaneService.updateTimers();
-        log.info("Orders Updated");
+//        log.info("Orders Updated");
     }
 
     @Override
     public void pageRight() {
-        log.info("Page Right");
+//        log.info("Page Right");
 
         if (orderList.size() / 10 > currentPage) {
             currentPage++;
@@ -132,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void pageLeft() {
-        log.info("Page Left");
+//        log.info("Page Left");
         if (currentPage > 0) {
             currentPage--;
             labelService.setPageText("Page " + (currentPage + 1) + " ");
@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void pageHome() {
-        log.info("Home");
+//        log.info("Home");
         if (currentPage != 0) {
             currentPage = 0;
             labelService.setPageText("Page 1");
