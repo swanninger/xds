@@ -1,48 +1,65 @@
 package com.xds.config;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.web.context.request.RequestContextListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableOAuth2Client
-@ConfigurationProperties(prefix = "security.oauth2.client")
+@ConfigurationProperties(prefix = "xds.server")
+@Getter
+@Setter
 public class OauthConfiguration {
-
-    private String client_id;
+    private String baseUrl;
+    private String accessTokenUri;
+    private String clientId;
+    private String clientSecret;
+    private String grantType;
+    private String username;
+    private String password;
+    private String mod;
 
     @Bean
-    public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext, ResourceOwnerPasswordResourceDetails details) {
+    protected ResourceOwnerPasswordResourceDetails resource() {
 
-        return new OAuth2RestTemplate(details, oauth2ClientContext);
+        ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
+
+        List scopes = new ArrayList<String>(2);
+        scopes.add("write");
+        scopes.add("read");
+
+        resource.setId("oauth2");
+        resource.setAccessTokenUri(baseUrl + accessTokenUri);
+        resource.setClientId(clientId);
+        resource.setClientSecret(clientSecret);
+        resource.setGrantType(grantType);
+//        resource.setScope(scopes);
+
+        resource.setUsername(username);
+        resource.setPassword(password);
+
+        return resource;
     }
 
-//    @Bean
-//    protected OAuth2ProtectedResourceDetails resource() {
-//
-//        ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
-//
-//        List scopes = new ArrayList<String>(2);
-//        scopes.add("write");
-//        scopes.add("read");
-//        resource.setAccessTokenUri("localhost:8080/oauth/token");
-//        resource.setClientId("client_id");
-//        resource.setClientSecret("secret");
-//        resource.setGrantType("password");
-//        resource.setScope(scopes);
-//
-//        resource.setUsername("**USERNAME**");
-//        resource.setPassword("**PASSWORD**");
-//
-//        return resource;
-//    }
+    @Bean
+    public OAuth2RestOperations oAuth2RestOperations() {
+        return new OAuth2RestTemplate(resource());
+
+    }
+
+
 }
