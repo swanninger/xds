@@ -43,7 +43,7 @@ public class OauthServiceImpl implements OauthService, ApplicationListener<Conte
     private void oauthLogin() {
         try {
             oAuth2RestTemplate.getAccessToken();
-            labelService.setAlert(oAuth2RestTemplate.getForObject(oauthConfiguration.getBaseUrl(), String.class), Duration.of(5, ChronoUnit.SECONDS));
+            labelService.setAlert(oAuth2RestTemplate.getForObject(oauthConfiguration.getBaseUrl()+ "api", String.class), Duration.of(5, ChronoUnit.SECONDS));
         } catch (Exception e) {
             labelService.setAlert("Invalid login...", Duration.of(5, ChronoUnit.SECONDS));
             try {
